@@ -1,0 +1,24 @@
+{
+  "name": "bunny-game",
+  "version": "0.1.0",
+  "description": "A bunny game",
+  "engines": {
+    "node": "^6.10.3"
+  },
+  "scripts": {
+    "browserify": "browserify ./src/main/game.js -o ./public/lib/game.js",
+    "server": "http-server",
+    "start": "npm test && npm run browserify && npm run server",
+    "test": "mocha --recursive ./src/test/"
+  },
+  "author": "Jani Kaarela",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "http-server": "^0.10.0",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
+    "phaser-ce": "^2.9.0"
+  }
+}
