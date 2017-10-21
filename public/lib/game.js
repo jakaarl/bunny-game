@@ -107310,8 +107310,8 @@ window.onload = function() {
     const windowSize = tileSize * tileCount;
     const grassTileRef = "grass";
     const bunnySpriteRef = "bunny";
-    const game = new Phaser.Game(windowSize, windowSize, Phaser.CANVAS, "game", { preload: preload, create: create, update: update });
-    const state = {};
+    const game = new Phaser.Game(windowSize, windowSize, Phaser.CANVAS, "game", { preload: preload, create: create, update: update, render: render });
+    const state = { game: game };
 
     function preload() {
         game.load.image(grassTileRef, "images/grass_t.png");
@@ -107326,40 +107326,27 @@ window.onload = function() {
         const tiles = {
             grass: grassTileRef
         };
+        state.game.time.slowMotion = 4.0;
         state.map = maps.createMap(game, settings, tiles);
         state.player = game.add.sprite(0, 0, bunnySpriteRef);
-        state.player.checkWorldBounds = true;
-        state.player.events.onOutOfBounds.add(function(player) {
-            const x = player.body.position.x;
-            const y = player.body.position.y;
-            if (x < 0) {
-                player.reset(windowSize + x, y);
-            } else if (x >= windowSize) {
-                player.reset(x % windowSize, y);
-            }
-            if (y < 0) {
-                player.reset(x, windowSize + y);
-            } else if (y >= windowSize) {
-                player.reset(x, y % windowSize);
-            }
-        }, this);
-        state.cursors = game.input.keyboard.createCursorKeys();
-        game.time.slowMotion = 4.0;
-        game.physics.arcade.enable(state.player);
     }
 
     function update() {
-        if (state.cursors.up.isDown) {
-            state.player.body.position.y -= tileSize;
-        } else if (state.cursors.down.isDown) {
-            state.player.body.position.y += tileSize;
+        if (state.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            state.player.y -= tileSize;
+        } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+            state.player.y += tileSize;
         }
 
-        if (state.cursors.left.isDown) {
-            state.player.body.position.x -= tileSize;
-        } else if (state.cursors.right.isDown) {
-            state.player.body.position.x += tileSize;
+        if (state.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            state.player.x -= tileSize;
+        } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            state.player.x += tileSize;
         }
+    }
+
+    function render() {
+        //console.log("X: " + state.player.x + "; Y: " + state.player.y);
     }
 }
 },{"./map":6,"phaser-ce/build/custom/p2":1,"phaser-ce/build/custom/phaser-split":2,"phaser-ce/build/custom/pixi":3}],6:[function(require,module,exports){
