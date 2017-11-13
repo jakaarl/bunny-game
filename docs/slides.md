@@ -2,12 +2,15 @@
 
 Tervetuloa koodikouluun!
 
+---
+
 ## Opet
 
 * Jani Kaarela
 * Katja Mankinen
 * Niko Viik
 
+---
 
 ## Ohjelma
 
@@ -18,6 +21,10 @@ _TODO:_ tähän karkea jaoittelu sisällöstä, tauot, arvioidut kellonajat, esi
 * Muuttujat ja operaattorit
 * Ohjelmointiharjoitus
 * Tauko (n. klo 12.30)
+* ...
+
+---
+
 * Funktiot, parametrit ja paluuarvot
 * Ehdolliset lausekkeet ja loopit
 * Ohjelmointiharjoitus
@@ -25,7 +32,6 @@ _TODO:_ tähän karkea jaoittelu sisällöstä, tauot, arvioidut kellonajat, esi
 * Rajapinnat ja callbackit
 * Pupupelin rajapintojen esittely
 * Ohjelmointiharjoitus
-
 
 ---
 
