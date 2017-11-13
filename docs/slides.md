@@ -14,7 +14,7 @@ Tervetuloa koodikouluun!
 
 ## Ohjelma
 
-_TODO:_ tähän karkea jaoittelu sisällöstä, tauot, arvioidut kellonajat, esim:
+_TODO:_ esimerkiksi:
 
 * Esittäytyminen
 * Johdanto
@@ -40,5 +40,17 @@ _TODO:_ tähän karkea jaoittelu sisällöstä, tauot, arvioidut kellonajat, esi
 * mikä on ohjelma ja ohjelmakoodi?
 * missä kaikkialla on ohjelmia?
 * mitä ohjelmilla voi tehdä?
-* mikä on ohjelmointikieli, mitä ohjelmointikieli on?
+* mikä on ohjelmointikieli, mitä ohjelmointikieliä on?
 * ketkä niitä ohjelmia oikein kirjoittavat?
+
+---
+
+# Javascript
+
+Ohjelmoimme JavaScriptillä. Se ei ehkä ole uusin, hienoin ja kaunein ohjelmointikieli,
+mutta se on yksinkertainen ja sopii hyvin opetuskäyttöön:
+* tavallinen webbiselain sisältää JS-tulkin
+* ei vaadi kääntäjää, käännösvaihetta tms.
+* sille löytyy suuri määrä hyödyllisiä kirjastoja...
+* ... joten pyörää ei tarvitse keksiä uudestaan!
+
