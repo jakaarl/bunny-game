@@ -14,8 +14,6 @@ Tervetuloa koodikouluun!
 
 ## Ohjelma
 
-_TODO:_ esimerkiksi:
-
 * Esittäytyminen
 * Johdanto
 * Muuttujat ja operaattorit
@@ -24,6 +22,8 @@ _TODO:_ esimerkiksi:
 * ...
 
 ---
+
+## Ohjelma (jatkuu)
 
 * Funktiot, parametrit ja paluuarvot
 * Ehdolliset lausekkeet ja loopit
@@ -35,7 +35,7 @@ _TODO:_ esimerkiksi:
 
 ---
 
-# Ohjelmat ja ohjelmointi
+## Ohjelmat ja ohjelmointi
 
 * mikä on ohjelma ja ohjelmakoodi?
 * missä kaikkialla on ohjelmia?
@@ -45,7 +45,7 @@ _TODO:_ esimerkiksi:
 
 ---
 
-# Javascript
+## Javascript
 
 Ohjelmoimme JavaScriptillä. Se ei ehkä ole uusin, hienoin ja kaunein ohjelmointikieli,
 mutta se on yksinkertainen ja sopii hyvin opetuskäyttöön:
