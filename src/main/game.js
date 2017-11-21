@@ -40,24 +40,25 @@ window.onload = function() {
         state.movementCooldown = false;
     }
 
-    function move(callback) {
+    function moveTo(x, y) {
         if (!state.movementCooldown) {
-            callback();
+            state.player.x = x;
+            state.player.y = y;
             setCooldown();
         }
     }
 
     function update() {
         if (state.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-            move(() => { state.player.y -= tileSize });
+            moveTo(state.player.x, state.player.y - tileSize);
         } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            move(() => { state.player.y += tileSize });
+            moveTo(state.player.x, state.player.y + tileSize);
         }
 
         if (state.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            move(() => { state.player.x -= tileSize });
+            moveTo(state.player.x - tileSize, state.player.y);
         } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            move(() => { state.player.x += tileSize });
+            moveTo(state.player.x + tileSize, state.player.y);
         }
     }
 
