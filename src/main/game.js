@@ -42,10 +42,16 @@ window.onload = function() {
 
     function moveTo(x, y) {
         if (!state.movementCooldown) {
-            state.player.x = x;
-            state.player.y = y;
+            state.player.x = wrapAroundAtBounds(x);
+            state.player.y = wrapAroundAtBounds(y);
             setCooldown();
         }
+    }
+
+    function wrapAroundAtBounds(coord) {
+        if (coord < 0) return windowSize + coord;
+        if (coord >= windowSize) return coord - windowSize;
+        return coord;
     }
 
     function update() {
