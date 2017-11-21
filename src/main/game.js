@@ -4,7 +4,7 @@ window.p2     = require('phaser-ce/build/custom/p2');
 window.Phaser = require('phaser-ce/build/custom/phaser-split');
 const maps    = require('./map');
 
-window.onload = function() {
+window.onload = function () {
     const tileSize = 50;
     const tileCount = 11;
     const movementCooldownTime = Phaser.Timer.QUARTER;
@@ -12,7 +12,7 @@ window.onload = function() {
     const grassTileRef = "grass";
     const bunnySpriteRef = "bunny";
     const game = new Phaser.Game(windowSize, windowSize, Phaser.CANVAS, "game", { preload: preload, create: create, update: update, render: render });
-    const state = { game: game, movementCooldown: false };
+    const state = { movementCooldown: false };
 
     function preload() {
         game.load.image(grassTileRef, "images/grass_t.png");
@@ -55,15 +55,15 @@ window.onload = function() {
     }
 
     function update() {
-        if (state.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+        if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             moveTo(state.player.x, state.player.y - tileSize);
-        } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+        } else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
             moveTo(state.player.x, state.player.y + tileSize);
         }
 
-        if (state.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+        if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             moveTo(state.player.x - tileSize, state.player.y);
-        } else if (state.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+        } else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             moveTo(state.player.x + tileSize, state.player.y);
         }
     }
