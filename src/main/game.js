@@ -58,7 +58,7 @@ window.onload = function () {
     state.layer = createRes.layer
     state.mapData = createRes.mapData
 
-    $('.level-name').text('TASO ' + state.currentLevel + 1)
+    $('.level-name').text('TASO ' + (state.currentLevel + 1))
     $('#code').val('')
     $('.program-result-message').text('')
     $('.button.execute').text('Suorita')
