@@ -33,3 +33,15 @@ html, body {
   padding-left: 20px;
   width: 100%;
 }
+
+.command.list {
+
+}
+
+.command {
+  color: #000;
+}
+
+.command.name {
+  font-weight: bold;
+}

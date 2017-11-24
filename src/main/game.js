@@ -14,6 +14,8 @@ const TILES_REF = "tiles";
 const STATUS_PLAYING = 0;
 const STATUS_NEXT_LEVEL = 1;
 
+const COMMAND_NAMES = ['ylos', 'alas', 'vasen', 'oikea', 'loop']
+
 window.onload = function () {
   const game = new Phaser.Game(WINDOW_SIZE, WINDOW_SIZE, Phaser.CANVAS, "game", {
     preload: preload,
@@ -143,6 +145,7 @@ window.onload = function () {
     const text = document.getElementById("code").value;
 
     if (text.length === 0) {
+      $('.program-result-message').text('Ohjelmassasi ei ole yhtään komentoa')
       return;
     }
 
@@ -152,14 +155,20 @@ window.onload = function () {
     resetBunnyLocation();
 
     let currentCommandIndex = 0;
-
+    $('.program-result-message').text('Suoritetaan ohjelmaa')
+    
     function executeNextCommand() {
       const command = commands[currentCommandIndex];
       console.log('executing command', command);
 
       var hasError = false;
       try {
-        eval(command);
+        if (!COMMAND_NAMES.includes(command.slice(0, command.indexOf('(')))) {
+          $('.program-result-message').html('Komentoa ei tunnistettu: <b>' + command + '</b>')
+          hasError = true
+        } else {
+          eval(command);
+        }
       } catch (e) {
         hasError = true;
         handleCommandError(e)
@@ -170,6 +179,8 @@ window.onload = function () {
 
         if (currentCommandIndex < commands.length) {
           setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
+        } else {
+          $('.program-result-message').text('Jokin komento ei nyt täsmännyt.')
         }
       }
     }
