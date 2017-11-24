@@ -179,7 +179,7 @@ window.onload = function () {
 
         if (currentCommandIndex < commands.length) {
           setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
-        } else {
+        } else if (state.status !== STATUS_NEXT_LEVEL) {
           $('.program-result-message').text('Jokin komento ei nyt täsmännyt.')
         }
       }
