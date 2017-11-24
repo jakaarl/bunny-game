@@ -30,9 +30,10 @@ module.exports.createLevel1 = function(game, settings, tiles) {
 
   // 0 = grass (33,107)
   // 1 = kanto
+  // 2 = porkkana
   const mapData = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -52,10 +53,15 @@ module.exports.createLevel1 = function(game, settings, tiles) {
       if (mapData[y][x] === 1) {
         tileMap.putTile(1, x, y, layer);
       }
+
+      if (mapData[y][x] === 2) {
+        tileMap.putTile(2, x, y, layer);
+      }
     }
   }
   return {
     tileMap,
-    layer
+    layer,
+    mapData
   }
 }

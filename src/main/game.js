@@ -23,7 +23,13 @@ window.onload = function () {
       render: render
     });
   
-    const state = { movementCooldown: false };
+    const state = {
+      movementCooldown: false,
+      playerTilePos: {
+        x: 1,
+        y: 1
+      }
+    };
 
     function preload() {
         game.load.image(TILES_REF, "images/tiles.png")
@@ -33,7 +39,7 @@ window.onload = function () {
       }
 
     function create() {
-        game.physics.startSystem(Phaser.Physics.ARCADE)
+        // game.physics.startSystem(Phaser.Physics.ARCADE)
 
         const settings = {
             tileSize: TILE_SIZE,
@@ -50,11 +56,12 @@ window.onload = function () {
         const createRes = maps.createLevel1(game, settings, TILES_REF);
         state.map = createRes.tileMap
         state.layer = createRes.layer
+        state.mapData = createRes.mapData
 
         state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
-        game.physics.enable(state.player)
-        // state.player.body.setSize(100, 150,100, 50);
-        state.player.body.collideWorldBounds = true;
+        // game.physics.enable(state.player)
+        // // state.player.body.setSize(100, 150,100, 50);
+        // state.player.body.collideWorldBounds = true;
     }
 
     function setCooldown() {
@@ -67,11 +74,11 @@ window.onload = function () {
     }
 
     function moveTo(x, y) {
-        if (!state.movementCooldown) {
-            state.player.x = wrapAroundAtBounds(x);
-            state.player.y = wrapAroundAtBounds(y);
-            setCooldown();
-        }
+      if (!state.movementCooldown) {
+        state.player.x = wrapAroundAtBounds(x);
+        state.player.y = wrapAroundAtBounds(y);
+        setCooldown();
+      }
     }
 
     function wrapAroundAtBounds(coord) {
@@ -80,11 +87,38 @@ window.onload = function () {
         return coord;
     }
 
+    function checkCollision(tileX, tileY) {
+      return state.mapData[tileY][tileX];
+    }
+
+    function movePlayer(x, y) {
+      console.log('movePlayer', state.playerTilePos.x)
+      const newX = state.playerTilePos.x + x;
+      const newY = state.playerTilePos.y + y;
+      console.log('new pos', newX, newY)
+      const collisionType = checkCollision(newX, newY);
+      console.log('collisionType', collisionType)
+
+      if (collisionType === 0) {
+        state.player.x = TILE_SIZE * newX;
+        state.player.y = TILE_SIZE * newY;
+        state.playerTilePos.x = newX;
+        state.playerTilePos.y = newY;
+      }
+
+      if (collisionType === 2) {
+        console.log('VOITTO')
+      }
+    }
+
     function update() {
         if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             moveTo(state.player.x, state.player.y - TILE_SIZE);
+            state.player.body.velocity.y = TILE_SIZE;
         } else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            moveTo(state.player.x, state.player.y + TILE_SIZE);
+            // moveTo(state.player.x, state.player.y + TILE_SIZE);
+            // state.player.body.velocity.y = -TILE_SIZE;
+            movePlayer(0, 1)
         }
 
         if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
@@ -93,25 +127,44 @@ window.onload = function () {
             moveTo(state.player.x + TILE_SIZE, state.player.y);
         }
 
-        game.physics.arcade.collide(state.player, state.layer);
+        // game.physics.arcade.collide(state.player, state.layer);
     }
 
     function render() {
 
     }
 
-    window.vasen = function() {
-        moveTo(state.player.x - TILE_SIZE, state.player.y);
-    }
+    window.vasen = function() { movePlayer(-1, 0); }
+    window.oikea = function() { movePlayer(1, 0); }
+    window.ylos = function() { movePlayer(0, -1); }
+    window.alas = function() { movePlayer(0, 1); }
 
     window.execute = function() {
-        eval(document.getElementById("code").value);
-        // var square = document.getElementById("square");
-        // if (leveys) {
-        //   square.style.width = leveys + "px";
-        // }
-        // if (korkeus) {
-        //   square.style.height = korkeus + "px";
-        // }
+      const text = document.getElementById("code").value;
+
+      if (text.length === 0) {
+        return;
       }
+
+      const commands = text.split('\n');
+      console.log('commands', commands);
+
+      let currentCommandIndex = 0;
+
+      function executeNextCommand() {
+        const command = commands[currentCommandIndex];
+        console.log('executing command', command);
+        eval(command);
+
+        currentCommandIndex++;
+
+        if (currentCommandIndex < commands.length) {
+          setTimeout(executeNextCommand, 1000);
+        }
+      }
+
+      executeNextCommand();
+
+      // eval(document.getElementById("code").value);
+    }
 }
