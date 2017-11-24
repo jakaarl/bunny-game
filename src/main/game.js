@@ -133,15 +133,39 @@ window.onload = function () {
     function executeNextCommand() {
       const command = commands[currentCommandIndex];
       console.log('executing command', command);
-      eval(command);
 
-      currentCommandIndex++;
+      var hasError = false;
+      try {
+        eval(command);
+      } catch (e) {
+        hasError = true;
+        handleCommandError(e)
+      }
 
-      if (currentCommandIndex < commands.length) {
-        setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
+      if (!hasError) {
+        currentCommandIndex++;
+
+        if (currentCommandIndex < commands.length) {
+          setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
+        }
       }
     }
 
     executeNextCommand();
+  }
+
+  function handleCommandError(e) {
+    console.log('e', e)
+    if (e.message.includes('is not defined')) {
+      const fnName = e.message.replace('is not defined', '')
+      $('.program-result-message').html('Virhe: Komentoa <b>' + fnName + '</b> ei ole määritelty')
+    } else if (e.message.includes('Unexpected token')) {
+      const tokenName = e.message.replace('Unexpected token ', '')
+      $('.program-result-message').html('Virhe: virheellinen merkki <b>' + tokenName + '</b>')
+    } else if (e.message.includes('Unexpected end of input')) {
+      $('.program-result-message').html('Virhe: Muistithan loppuvan sulun?')
+    } else {
+      $('.program-result-message').html('Virhe: Apua ope!', e)
+    }
   }
 }
