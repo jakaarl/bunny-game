@@ -27,7 +27,7 @@ window.onload = function () {
       x: 1,
       y: 1
     },
-    currentLevel: 0,
+    currentLevel: -1,
     status: STATUS_PLAYING
   }
 
@@ -56,7 +56,7 @@ window.onload = function () {
     state.layer = createRes.layer
     state.mapData = createRes.mapData
 
-    $('.level-name').text('TASO ' + state.currentLevel)
+    $('.level-name').text('TASO ' + state.currentLevel + 1)
     $('#code').val('')
     $('.program-result-message').text('')
     $('.button.execute').text('Suorita')
@@ -96,6 +96,11 @@ window.onload = function () {
   }
 
   // PUBLIC API
+
+  window.setLevel = function(level) {
+    state.currentLevel = level
+    loadNextLevel() 
+  }
 
   window.vasen = function() {
     movePlayer(-1, 0);
@@ -144,6 +149,8 @@ window.onload = function () {
     const commands = parseCommands(text.split('\n'));
     console.log('commands', commands);
 
+    resetBunnyLocation();
+
     let currentCommandIndex = 0;
 
     function executeNextCommand() {
@@ -185,5 +192,12 @@ window.onload = function () {
     } else {
       $('.program-result-message').html('Virhe: Apua ope!', e)
     }
+  }
+
+  function resetBunnyLocation() {
+    state.playerTilePos.x = 1;
+    state.playerTilePos.y = 1;
+    state.player.x = TILE_SIZE * 1;
+    state.player.y = TILE_SIZE * 1;
   }
 }
