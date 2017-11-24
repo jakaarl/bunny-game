@@ -16,13 +16,35 @@ const MAPS = {
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  level2: [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   ]
 };
 
+let tileMap = null;
+let layer = null;
+
 module.exports.loadLevel = function(game, settings, tiles, levelNumber) {
-  const tileMap = game.add.tilemap();
-  tileMap.addTilesetImage(tiles);
-  const layer = tileMap.create("layerGround", settings.tileCount, settings.tileCount, settings.tileSize, settings.tileSize);
+  if (!tileMap) {
+    tileMap = game.add.tilemap();
+    tileMap.addTilesetImage(tiles);
+  }
+
+  if (layer) {
+    layer.destroy();
+  }
+
+  layer = tileMap.create("layerGround", settings.tileCount, settings.tileCount, settings.tileSize, settings.tileSize);
   layer.resizeWorld();
 
   const mapData = MAPS['level' + levelNumber];
@@ -33,7 +55,6 @@ module.exports.loadLevel = function(game, settings, tiles, levelNumber) {
     }
   }
   return {
-    tileMap,
     layer,
     mapData
   }

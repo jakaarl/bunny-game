@@ -3,13 +3,18 @@
   <head>
     <title>Bunny Game</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="lib/game.js"></script>
   </head>
   <body>
     <div class="main">
       <div class="container">
-        <textarea id="code" cols="80" rows="10"></textarea>
-        <button onclick="execute()">Suorita!</button>
+        <h1 class="level-name">Harjoitus ??</h1>
+        <div><textarea id="code" cols="80" rows="10"></textarea></div>
+        <div>
+          <button class="button execute" onclick="execute()">Suorita!</button>
+          <span class="program-result-message">result</span>
+        </div>
       </div>
       <div class="main container">
         <div id="game"></div>

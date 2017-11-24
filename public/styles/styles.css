@@ -3,6 +3,11 @@ html, body {
   height: 100%;
   padding: 0;
   margin: 0;
+  background-color: #DADAC0;
+}
+
+.level-name {
+  text-align: center;
 }
 
 .main {
@@ -15,4 +20,16 @@ html, body {
 .main.container {
   width: 50%;
   padding: 10px;
+}
+
+.button.execute {
+  border: 2px solid #000;
+  background-color: #fff;
+  width: 150px;
+  height: 50px;
+}
+
+.program-result-message {
+  padding-left: 20px;
+  width: 100%;
 }

@@ -11,6 +11,9 @@ const MOVEMENT_COOLDOWN_TIME_MS = 500;
 const BUNNY_SPRITE_REF = "bunny";
 const TILES_REF = "tiles";
 
+const STATUS_PLAYING = 0;
+const STATUS_NEXT_LEVEL = 1;
+
 window.onload = function () {
   const game = new Phaser.Game(WINDOW_SIZE, WINDOW_SIZE, Phaser.CANVAS, "game", {
     preload: preload,
@@ -20,12 +23,12 @@ window.onload = function () {
   });
 
   const state = {
-    movementCooldown: false,
     playerTilePos: {
       x: 1,
       y: 1
     },
-    currentLevel: 1
+    currentLevel: 0,
+    status: STATUS_PLAYING
   }
 
   function preload() {
@@ -34,17 +37,33 @@ window.onload = function () {
   }
 
   function create() {
+    // state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
+    loadNextLevel();
+  }
+
+  function loadNextLevel() {
     const settings = {
       tileSize: TILE_SIZE,
       tileCount: TILE_COUNT
     };
 
+    state.currentLevel++;
+    state.status = STATUS_PLAYING;
+    state.playerTilePos.x = 1;
+    state.playerTilePos.y = 1;
+
     const createRes = maps.loadLevel(game, settings, TILES_REF, state.currentLevel);
-    state.map = createRes.tileMap
     state.layer = createRes.layer
     state.mapData = createRes.mapData
 
+    $('.level-name').text('TASO ' + state.currentLevel)
+    $('#code').val('')
+    $('.program-result-message').text('')
+    $('.button.execute').text('Suorita')
+
     state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
+    state.player.x = TILE_SIZE * 1;
+    state.player.y = TILE_SIZE * 1;
   }
 
   function checkCollision(tileX, tileY) {
@@ -64,7 +83,9 @@ window.onload = function () {
     }
 
     if (collisionType === 2) {
-      console.log('VOITTO')
+      state.status = STATUS_NEXT_LEVEL;
+      $('.program-result-message').text('Voitto!')
+      $('.button.execute').text('Seuraava taso')
     }
   }
 
@@ -93,6 +114,11 @@ window.onload = function () {
   }
 
   window.execute = function() {
+    if (state.status === STATUS_NEXT_LEVEL) {
+      loadNextLevel();
+      return;
+    }
+
     const text = document.getElementById("code").value;
 
     if (text.length === 0) {
