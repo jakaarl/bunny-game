@@ -27,7 +27,7 @@ window.onload = function () {
       x: 1,
       y: 1
     },
-    currentLevel: 0,
+    currentLevel: -1,
     status: STATUS_PLAYING
   }
 
@@ -96,6 +96,11 @@ window.onload = function () {
   }
 
   // PUBLIC API
+
+  window.setLevel = function(level) {
+    state.currentLevel = level
+    loadNextLevel() 
+  }
 
   window.vasen = function() {
     movePlayer(-1, 0);
