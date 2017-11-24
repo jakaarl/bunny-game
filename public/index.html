@@ -2,9 +2,18 @@
 <html>
   <head>
     <title>Bunny Game</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="lib/game.js"></script>
   </head>
   <body>
-    <div id="game"></div>
-    <script src="lib/game.js"></script>
+    <div class="main">
+      <div class="container">
+        <textarea id="code" cols="80" rows="10"></textarea>
+        <button onclick="execute()">Suorita!</button>
+      </div>
+      <div class="main container">
+        <div id="game"></div>
+      </div>
+    </div>
   </body>
 </html>
