@@ -14,7 +14,7 @@ const TILES_REF = "tiles";
 const STATUS_PLAYING = 0;
 const STATUS_NEXT_LEVEL = 1;
 
-const COMMAND_NAMES = ['ylos', 'alas', 'vasen', 'oikea', 'loop']
+const COMMAND_NAMES = ['ylos', 'alas', 'vasen', 'oikea', 'toista']
 
 window.onload = function () {
   const game = new Phaser.Game(WINDOW_SIZE, WINDOW_SIZE, Phaser.CANVAS, "game", {
@@ -30,7 +30,8 @@ window.onload = function () {
       y: 1
     },
     currentLevel: -1,
-    status: STATUS_PLAYING
+    status: STATUS_PLAYING,
+    isRunning: false
   }
 
   function preload() {
@@ -53,7 +54,8 @@ window.onload = function () {
     state.status = STATUS_PLAYING;
     state.playerTilePos.x = 1;
     state.playerTilePos.y = 1;
-
+    state.isRunning = false;
+    
     const createRes = maps.loadLevel(game, settings, TILES_REF, state.currentLevel);
     state.layer = createRes.layer
     state.mapData = createRes.mapData
@@ -61,7 +63,9 @@ window.onload = function () {
     $('.level-name').text('TASO ' + (state.currentLevel + 1))
     $('#code').val('')
     $('.program-result-message').text('')
+    $('.program-result-message').removeClass('victory')
     $('.button.execute').text('Suorita')
+    $('.button.execute').removeClass('victory')
 
     state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
     state.player.x = TILE_SIZE * 1;
@@ -86,8 +90,12 @@ window.onload = function () {
 
     if (collisionType === 2) {
       state.status = STATUS_NEXT_LEVEL;
+      $('.program-result-message').toggleClass('victory')
       $('.program-result-message').text('Voitto!')
       $('.button.execute').text('Seuraava taso')
+      $('.button.execute').toggleClass('victory')
+      $('.button.execute').toggle('victory')
+      state.isRunning = false;
     }
   }
 
@@ -123,10 +131,11 @@ window.onload = function () {
   function parseCommands(commands) {
     let parsedCommands = []
     commands.forEach(cmd => {
-      if (cmd.startsWith('loop')) {
+      cmd = cmd.trim()
+      if (cmd.startsWith('toista')) {
         const fnName = cmd.slice(cmd.indexOf('(') + 1, cmd.indexOf(',')).trim()
         const times = parseInt(cmd.slice(cmd.indexOf(',') + 1, cmd.indexOf(')')))
-        console.log('parse loop', cmd, fnName, times)
+        console.log('parse toista', cmd, fnName, times)
         for(let i = 0; i < times; ++i) { parsedCommands.push(fnName + '()'); }
       } else {
         parsedCommands.push(cmd)
@@ -141,6 +150,11 @@ window.onload = function () {
       loadNextLevel();
       return;
     }
+
+    if (state.isRunning) {
+      return;
+    }
+    state.isRunning = true;
 
     const text = document.getElementById("code").value;
 
@@ -170,6 +184,7 @@ window.onload = function () {
           eval(command);
         }
       } catch (e) {
+        state.isRunning = false;
         hasError = true;
         handleCommandError(e)
       }
@@ -181,6 +196,7 @@ window.onload = function () {
           setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
         } else if (state.status !== STATUS_NEXT_LEVEL) {
           $('.program-result-message').text('Jokin komento ei nyt täsmännyt.')
+          state.isRunning = false;
         }
       }
     }

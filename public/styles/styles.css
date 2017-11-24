@@ -36,9 +36,19 @@ html, body {
   height: 50px;
 }
 
+.button.execute.victory {
+  background-color: green;
+}
+
 .program-result-message {
   padding-left: 20px;
   width: 100%;
+  color: black;
+}
+
+.program-result-message.victory {
+  font-weight: bold;
+  color: green;
 }
 
 .command.list {
