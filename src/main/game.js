@@ -130,7 +130,7 @@ window.onload = function () {
   function parseCommands(commands) {
     let parsedCommands = []
     commands.forEach(cmd => {
-      cmd = cmd.trim()
+      cmd = cmd.trim().toLowerCase()
       if (cmd.startsWith('toista')) {
         const fnName = cmd.slice(cmd.indexOf('(') + 1, cmd.indexOf(',')).trim()
         const times = parseInt(cmd.slice(cmd.indexOf(',') + 1, cmd.indexOf(')')))
