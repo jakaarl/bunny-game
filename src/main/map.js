@@ -1,14 +1,61 @@
 "use strict";
 window.Phaser = require('phaser-ce/build/custom/phaser-split');
 
-module.exports.createMap = function(game, settings, tiles) {
-    const tileMap = game.add.tilemap();
-    tileMap.addTilesetImage(tiles.grass, undefined, settings.tileSize, settings.tileSize);
-    const layer = tileMap.create("layer", settings.tileCount, settings.tileCount, settings.tileSize, settings.tileSize);
-    for (let i = 0; i < settings.tileCount; i++) {
-        for (let j = 0; j < settings.tileCount; j++) {
-            tileMap.putTile(0, i, j, layer);
-        }
+// 0 = grass (33,107)
+// 1 = kanto
+// 2 = porkkana
+const MAPS = {
+  level1: [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 2, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  level2: [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ]
+};
+
+let tileMap = null;
+let layer = null;
+
+module.exports.loadLevel = function(game, settings, tiles, levelNumber) {
+  if (!tileMap) {
+    tileMap = game.add.tilemap();
+    tileMap.addTilesetImage(tiles);
+  }
+
+  if (layer) {
+    layer.destroy();
+  }
+
+  layer = tileMap.create("layerGround", settings.tileCount, settings.tileCount, settings.tileSize, settings.tileSize);
+  layer.resizeWorld();
+
+  const mapData = MAPS['level' + levelNumber];
+
+  for (let y = 0; y < settings.tileCount; ++y) {
+    for (let x = 0; x < settings.tileCount; ++x) {
+      tileMap.putTile(mapData[y][x], x, y, layer);
     }
-    return tileMap;
+  }
+  return {
+    layer,
+    mapData
+  }
 }

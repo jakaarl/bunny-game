@@ -4,71 +4,168 @@ window.p2     = require('phaser-ce/build/custom/p2');
 window.Phaser = require('phaser-ce/build/custom/phaser-split');
 const maps    = require('./map');
 
+const TILE_SIZE = 32;
+const TILE_COUNT = 10;
+const WINDOW_SIZE = TILE_SIZE * TILE_COUNT;
+const MOVEMENT_COOLDOWN_TIME_MS = 500;
+const BUNNY_SPRITE_REF = "bunny";
+const TILES_REF = "tiles";
+
+const STATUS_PLAYING = 0;
+const STATUS_NEXT_LEVEL = 1;
+
 window.onload = function () {
-    const tileSize = 50;
-    const tileCount = 11;
-    const movementCooldownTime = Phaser.Timer.QUARTER;
-    const windowSize = tileSize * tileCount;
-    const grassTileRef = "grass";
-    const bunnySpriteRef = "bunny";
-    const game = new Phaser.Game(windowSize, windowSize, Phaser.CANVAS, "game", { preload: preload, create: create, update: update, render: render });
-    const state = { movementCooldown: false };
+  const game = new Phaser.Game(WINDOW_SIZE, WINDOW_SIZE, Phaser.CANVAS, "game", {
+    preload: preload,
+    create: create,
+    update: update,
+    render: render
+  });
 
-    function preload() {
-        game.load.image(grassTileRef, "images/grass_t.png");
-        game.load.image(bunnySpriteRef, "images/bunny_s.png");
+  const state = {
+    playerTilePos: {
+      x: 1,
+      y: 1
+    },
+    currentLevel: 0,
+    status: STATUS_PLAYING
+  }
+
+  function preload() {
+    game.load.image(TILES_REF, "images/tiles.png")
+    game.load.image(BUNNY_SPRITE_REF, "images/bunny_s.png");
+  }
+
+  function create() {
+    // state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
+    loadNextLevel();
+  }
+
+  function loadNextLevel() {
+    const settings = {
+      tileSize: TILE_SIZE,
+      tileCount: TILE_COUNT
+    };
+
+    state.currentLevel++;
+    state.status = STATUS_PLAYING;
+    state.playerTilePos.x = 1;
+    state.playerTilePos.y = 1;
+
+    const createRes = maps.loadLevel(game, settings, TILES_REF, state.currentLevel);
+    state.layer = createRes.layer
+    state.mapData = createRes.mapData
+
+    $('.level-name').text('TASO ' + state.currentLevel)
+    $('#code').val('')
+    $('.program-result-message').text('')
+    $('.button.execute').text('Suorita')
+
+    state.player = game.add.sprite(32, 32, BUNNY_SPRITE_REF);
+    state.player.x = TILE_SIZE * 1;
+    state.player.y = TILE_SIZE * 1;
+  }
+
+  function checkCollision(tileX, tileY) {
+    return state.mapData[tileY][tileX];
+  }
+
+  function movePlayer(x, y) {
+    const newX = state.playerTilePos.x + x;
+    const newY = state.playerTilePos.y + y;
+    const collisionType = checkCollision(newX, newY);
+
+    if (collisionType === 0 || collisionType === 2) {
+      state.player.x = TILE_SIZE * newX;
+      state.player.y = TILE_SIZE * newY;
+      state.playerTilePos.x = newX;
+      state.playerTilePos.y = newY;
     }
 
-    function create() {
-        const settings = {
-            tileSize: tileSize,
-            tileCount: tileCount
-        };
-        const tiles = {
-            grass: grassTileRef
-        };
-        state.map = maps.createMap(game, settings, tiles);
-        state.player = game.add.sprite(0, 0, bunnySpriteRef);
+    if (collisionType === 2) {
+      state.status = STATUS_NEXT_LEVEL;
+      $('.program-result-message').text('Voitto!')
+      $('.button.execute').text('Seuraava taso')
+    }
+  }
+
+  function update() {
+  }
+
+  function render() {
+  }
+
+  // PUBLIC API
+
+  window.vasen = function() {
+    movePlayer(-1, 0);
+  }
+
+  window.oikea = function() {
+    movePlayer(1, 0);
+  }
+
+  window.ylos = function() {
+    movePlayer(0, -1);
+  }
+
+  window.alas = function() {
+    movePlayer(0, 1);
+  }
+
+  window.execute = function() {
+    if (state.status === STATUS_NEXT_LEVEL) {
+      loadNextLevel();
+      return;
     }
 
-    function setCooldown() {
-        state.movementCooldown = true;
-        game.time.events.add(movementCooldownTime, unsetCooldown, this);
+    const text = document.getElementById("code").value;
+
+    if (text.length === 0) {
+      return;
     }
 
-    function unsetCooldown() {
-        state.movementCooldown = false;
-    }
+    const commands = text.split('\n');
+    console.log('commands', commands);
 
-    function moveTo(x, y) {
-        if (!state.movementCooldown) {
-            state.player.x = wrapAroundAtBounds(x);
-            state.player.y = wrapAroundAtBounds(y);
-            setCooldown();
+    let currentCommandIndex = 0;
+
+    function executeNextCommand() {
+      const command = commands[currentCommandIndex];
+      console.log('executing command', command);
+
+      var hasError = false;
+      try {
+        eval(command);
+      } catch (e) {
+        hasError = true;
+        handleCommandError(e)
+      }
+
+      if (!hasError) {
+        currentCommandIndex++;
+
+        if (currentCommandIndex < commands.length) {
+          setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
         }
+      }
     }
 
-    function wrapAroundAtBounds(coord) {
-        if (coord < 0) return windowSize + coord;
-        if (coord >= windowSize) return coord - windowSize;
-        return coord;
-    }
+    executeNextCommand();
+  }
 
-    function update() {
-        if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-            moveTo(state.player.x, state.player.y - tileSize);
-        } else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            moveTo(state.player.x, state.player.y + tileSize);
-        }
-
-        if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            moveTo(state.player.x - tileSize, state.player.y);
-        } else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            moveTo(state.player.x + tileSize, state.player.y);
-        }
+  function handleCommandError(e) {
+    console.log('e', e)
+    if (e.message.includes('is not defined')) {
+      const fnName = e.message.replace('is not defined', '')
+      $('.program-result-message').html('Virhe: Komentoa <b>' + fnName + '</b> ei ole määritelty')
+    } else if (e.message.includes('Unexpected token')) {
+      const tokenName = e.message.replace('Unexpected token ', '')
+      $('.program-result-message').html('Virhe: virheellinen merkki <b>' + tokenName + '</b>')
+    } else if (e.message.includes('Unexpected end of input')) {
+      $('.program-result-message').html('Virhe: Muistithan loppuvan sulun?')
+    } else {
+      $('.program-result-message').html('Virhe: Apua ope!', e)
     }
-
-    function render() {
-        
-    }
+  }
 }
