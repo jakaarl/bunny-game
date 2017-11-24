@@ -94,7 +94,6 @@ window.onload = function () {
       $('.program-result-message').text('Voitto!')
       $('.button.execute').text('Seuraava taso')
       $('.button.execute').toggleClass('victory')
-      $('.button.execute').toggle('victory')
       state.isRunning = false;
     }
   }
