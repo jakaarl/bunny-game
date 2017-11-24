@@ -113,6 +113,22 @@ window.onload = function () {
     movePlayer(0, 1);
   }
 
+  function parseCommands(commands) {
+    let parsedCommands = []
+    commands.forEach(cmd => {
+      if (cmd.startsWith('loop')) {
+        const fnName = cmd.slice(cmd.indexOf('(') + 1, cmd.indexOf(',')).trim()
+        const times = parseInt(cmd.slice(cmd.indexOf(',') + 1, cmd.indexOf(')')))
+        console.log('parse loop', cmd, fnName, times)
+        for(let i = 0; i < times; ++i) { parsedCommands.push(fnName + '()'); }
+      } else {
+        parsedCommands.push(cmd)
+      }
+    })
+
+    return parsedCommands
+  }
+
   window.execute = function() {
     if (state.status === STATUS_NEXT_LEVEL) {
       loadNextLevel();
@@ -125,7 +141,7 @@ window.onload = function () {
       return;
     }
 
-    const commands = text.split('\n');
+    const commands = parseCommands(text.split('\n'));
     console.log('commands', commands);
 
     let currentCommandIndex = 0;
@@ -151,7 +167,9 @@ window.onload = function () {
       }
     }
 
-    executeNextCommand();
+    if (commands.length > 0) {
+      executeNextCommand();
+    }
   }
 
   function handleCommandError(e) {
