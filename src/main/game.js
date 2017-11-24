@@ -153,7 +153,6 @@ window.onload = function () {
     if (state.isRunning) {
       return;
     }
-    state.isRunning = true;
 
     const text = document.getElementById("code").value;
 
@@ -169,6 +168,7 @@ window.onload = function () {
 
     let currentCommandIndex = 0;
     $('.program-result-message').text('Suoritetaan ohjelmaa')
+    state.isRunning = true;
     
     function executeNextCommand() {
       const command = commands[currentCommandIndex];
@@ -195,9 +195,9 @@ window.onload = function () {
           setTimeout(executeNextCommand, MOVEMENT_COOLDOWN_TIME_MS);
         } else if (state.status !== STATUS_NEXT_LEVEL) {
           $('.program-result-message').text('Jokin komento ei nyt täsmännyt.')
-          state.isRunning = false;
         }
       }
+      state.isRunning = false;
     }
 
     if (commands.length > 0) {
@@ -206,6 +206,7 @@ window.onload = function () {
   }
 
   function handleCommandError(e) {
+    state.isRunning = false;
     console.log('e', e)
     if (e.message.includes('is not defined')) {
       const fnName = e.message.replace('is not defined', '')
