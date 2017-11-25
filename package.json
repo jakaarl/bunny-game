@@ -8,7 +8,8 @@
   "scripts": {
     "browserify": "browserify ./src/main/game.js -o ./public/lib/game.js",
     "server": "http-server",
-    "start": "npm test && npm run browserify && npm run server",
+    "build": "npm test && npm run browserify && npm run server",
+    "start": "http-server",
     "test": "mocha --recursive ./src/test/"
   },
   "author": "Jani Kaarela",
