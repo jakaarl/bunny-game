@@ -14,10 +14,11 @@
   },
   "author": "Jani Kaarela",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "http-server": "^0.10.0"
+  },
   "devDependencies": {
     "browserify": "^14.4.0",
-    "http-server": "^0.10.0",
     "mocha": "^4.0.1",
     "phaser-ce": "^2.9.0"
   }
