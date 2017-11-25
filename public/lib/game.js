@@ -107451,8 +107451,8 @@ window.onload = function () {
   // PUBLIC API
 
   window.setLevel = function(level) {
-    state.currentLevel = level
-    loadNextLevel() 
+    state.currentLevel = level - 1
+    loadNextLevel()
   }
 
   window.vasen = function() {
@@ -107705,6 +107705,20 @@ const LEVELS = [
       [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
       [1, 0, 1, 1, 0, 0, 0, 1, 0, 1],
       [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ]
+  },
+  {
+    mapData: [ // FINAL ULTIMATE MAZE
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 1, 0, 2, 1],
+      [1, 3, 3, 3, 0, 1, 1, 0, 1, 1],
+      [1, 0, 2, 3, 0, 1, 0, 0, 0, 1],
+      [1, 0, 3, 3, 0, 1, 0, 1, 0, 1],
+      [1, 0, 3, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 3, 3, 0, 3, 0, 1, 0, 1],
+      [1, 0, 0, 0, 1, 0, 1, 0, 0, 1],
+      [1, 0, 1, 0, 0, 0, 0, 0, 1, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ]
   }

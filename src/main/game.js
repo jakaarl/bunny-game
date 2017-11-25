@@ -107,8 +107,8 @@ window.onload = function () {
   // PUBLIC API
 
   window.setLevel = function(level) {
-    state.currentLevel = level
-    loadNextLevel() 
+    state.currentLevel = level - 1
+    loadNextLevel()
   }
 
   window.vasen = function() {
